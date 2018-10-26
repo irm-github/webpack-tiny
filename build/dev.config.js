@@ -7,14 +7,12 @@ var CONFIG = require('./common/config').config;
 
 var config = {
   // 共有配置  
-  context: CONFIG.context,
+  // context: CONFIG.context,
   module: CONFIG.module,
+  entry: CONFIG.entry,
   
   // 单独配置
   mode: 'development',
-  entry: {
-    'index': path.resolve(CONSTANT.SRC_PATH, 'index.js'),
-  },
   output: {
     path: CONSTANT.DIST_PATH,
     publicPath: '/dist/', //静态资源存放于index.html同根目录下使用，即不分开部署时使用
@@ -27,11 +25,16 @@ var config = {
     inline: true,
     historyApiFallback: false,
     disableHostCheck: true,
+    contentBase: CONSTANT.ROOT_PATH,
+    watchOptions: {
+      ignored: /node_modules/
+    },
   },
   plugins: [
   ],
 };
 
+// 合并公共配置中的插件
 config.plugins = CONFIG.plugins.concat(config.plugins);
 
 module.exports = config;

@@ -7,17 +7,16 @@ var UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 var CONSTANT = require('./common/constant');
 var CONFIG = require('./common/config').config;
 var program = require('./common/config').program;
+var util = require('./common/config').util;
 
 var config = {
   // 共有配置  
-  context: CONFIG.context,
+  // context: CONFIG.context,
   module: CONFIG.module,
+  entry: CONFIG.entry,
   
   // 单独配置
   mode: 'production',
-  entry: {
-    'index': path.resolve(CONSTANT.SRC_PATH, 'index.js'),
-  },
   output: {
     path: CONSTANT.DIST_PATH,
     filename: '[name].bundle.[hash:8].js',
@@ -40,7 +39,8 @@ var config = {
   ],
 };
 
-if (program.env === CONSTANT.ENV_STG) {
+// 测试环境
+if (util.isEnvStg()) {
   config.devtool = 'source-maps';
 }
 

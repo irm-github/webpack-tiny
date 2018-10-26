@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "webpack --config ./build/dev.config.js --watch --env dev",
+    "dev": "webpack-dev-server --config ./build/dev.config.js --env dev --host 0.0.0.0 --port 5006 --hot --inline --color --progress",
     "stg": "webpack --config ./build/prd.config.js --env stg",
     "prd": "webpack --config ./build/prd.config.js --env prd"
   },
@@ -20,9 +20,14 @@
     "babel-preset-stage-0": "^6.24.1",
     "clean-webpack-plugin": "^0.1.19",
     "commander": "^2.18.0",
+    "ejs": "^2.6.1",
+    "ejs-compiled-loader": "^1.1.0",
+    "ejs-loader": "^0.3.1",
+    "html-loader": "^0.5.5",
     "html-webpack-plugin": "^3.2.0",
     "uglifyjs-webpack-plugin": "^2.0.1",
     "webpack": "^4.20.2",
-    "webpack-cli": "^3.1.2"
+    "webpack-cli": "^3.1.2",
+    "webpack-dev-server": "^3.1.10"
   }
 }
