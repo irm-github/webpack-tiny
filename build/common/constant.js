@@ -5,6 +5,7 @@ var ROOT_PATH = path.resolve(__dirname, '../../');
 var SRC_PATH = path.resolve(ROOT_PATH, './src');
 var DIST_PATH = path.resolve(ROOT_PATH, './dist');
 var BUILD_PATH = path.resolve(ROOT_PATH, './build');
+var SRC_CONTAINER_PATH = path.resolve(SRC_PATH, './container');
 
 // 环境常量
 var ENV_DEV = 'DEV';
@@ -16,6 +17,7 @@ module.exports = {
   SRC_PATH,
   DIST_PATH,
   BUILD_PATH,
+  SRC_CONTAINER_PATH,
 
   ENV_DEV,
   ENV_STG,

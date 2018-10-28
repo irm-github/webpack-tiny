@@ -21,15 +21,20 @@ program
   .parse(process.argv);
 
 util = UtilClass({
-  env: program.env
+  env: program.env,
+  entryOpt: {
+    absTplDir: CONSTANT.SRC_CONTAINER_PATH,
+    exclude: [
+      'common'
+    ]
+  },
 });
+
+var entries = util.getEntries();
 
 var config = {
   // context: CONSTANT.ROOT_PATH,
-  entry: {
-    'home': path.resolve(CONSTANT.SRC_PATH, 'home/index.js'),
-    'about': path.resolve(CONSTANT.SRC_PATH, 'about/index.js'),
-  },
+  entry: entries.obj,
   module: {
     rules: [
       {
@@ -40,7 +45,12 @@ var config = {
       {
         test: /\.ejs$/,
         exclude: /node_modules/,
-        use: 'ejs-compiled-loader',
+        use: 'compile-ejs-loader',
+      },
+      {
+        test: /\.swig$/,
+        exclude: /node_modules/,
+        use: 'swig-loader',
       },
       {
         test: /\.js$/,
@@ -57,43 +67,34 @@ var config = {
       isEnvStg: JSON.stringify(util.isEnvStg()),
       isEnvDev: JSON.stringify(util.isEnvDev()),
     }),
-    // 生成页面插件
-    new HtmlWebpackPlugin({
-      filename: 'home/index.html',  //默认目录路径为output.path
-      template: path.resolve(CONSTANT.SRC_PATH, 'home/html.js'), //默认目录路径为根目录
-      inject: true,
-      chunks: [ 'home' ],
-      minify: (program.env === CONSTANT.ENV_PRD)
-        ? {
-          removeAttributeQuotes: true,
-          collapseWhitespace: true,
-          html5: true,
-          minifyCSS: true,
-          removeComments: true,
-          removeEmptyAttributes: true,
-        }
-        : false,
-    }),
-    new HtmlWebpackPlugin({
-      filename: 'about/index.html',  //默认目录路径为output.path
-      // template: path.resolve(CONSTANT.SRC_PATH, 'about/html.js'), //默认目录路径为根目录
-      // template: 'ejs-compiled!'+path.resolve(CONSTANT.SRC_PATH, 'about/index.ejs'), //默认目录路径为根目录
-      template: 'ejs-compiled-loader!'+'./src/about/index.ejs', //默认目录路径为根目录
-      inject: true,
-      chunks: [ 'about' ],
-      minify: (program.env === CONSTANT.ENV_PRD)
-        ? {
-          removeAttributeQuotes: true,
-          collapseWhitespace: true,
-          html5: true,
-          minifyCSS: true,
-          removeComments: true,
-          removeEmptyAttributes: true,
-        }
-        : false,
-    }),
   ]
 };
+
+config.plugins = config.plugins.concat(generateHtmlWebpackPlugins());
+
+function generateHtmlWebpackPlugins() {
+  var plugins = entries.arr.map(function(entry){
+    return new HtmlWebpackPlugin({
+      filename: entry + '/index.html',  //默认目录路径为output.path
+      // template: '!!swig-loader!'+path.resolve(CONSTANT.SRC_CONTAINER_PATH, entry+'/index.swig'), //默认目录路径为根目录
+      template: path.resolve(CONSTANT.SRC_CONTAINER_PATH, entry+'/html.js'), //默认目录路径为根目录
+      inject: true,
+      chunks: [ entry ],
+      minify: (util.isEnvStg() || util.isEnvPrd())
+        ? {
+          removeAttributeQuotes: true,
+          collapseWhitespace: true,
+          html5: true,
+          minifyCSS: true,
+          removeComments: true,
+          removeEmptyAttributes: true,
+        }
+        : false,
+    });
+  });
+  return plugins;
+}
+
 
 module.exports = {
   config: config,

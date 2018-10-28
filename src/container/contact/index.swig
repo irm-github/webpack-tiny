@@ -1,0 +1,6 @@
+{% extends '../common/layout.swig' %}
+
+{% block title %} Contact {% endblock %}
+{% block content %}
+    <h1>Contact Page</h1>
+{% endblock %}
