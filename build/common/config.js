@@ -1,5 +1,6 @@
 var CONSTANT = require('./constant');
 
+var qs = require('query-string');
 var path = require('path');
 var program = require('commander');
 var UtilClass = require('./util');
@@ -50,7 +51,8 @@ var config = {
       {
         test: /\.swig$/,
         exclude: /node_modules/,
-        use: 'swig-loader',
+        use: path.resolve(CONSTANT.BUILD_PATH, 'myloader/index.js'),
+        // use: 'swig-loader',
       },
       {
         test: /\.js$/,
@@ -95,6 +97,9 @@ function generateHtmlWebpackPlugins() {
   return plugins;
 }
 
+var query = qs.stringify({ name: ['ironman', 'hulk'] }, {arrayFormat: 'bracket'})
+console.log(query);
+console.log(typeof query);
 
 module.exports = {
   config: config,
