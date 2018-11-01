@@ -4,4 +4,5 @@ var ret = Object.assign({}, commonLocals, {
 });
 ret.breadcrumbs.push('contact');
 ret.breadcrumbs.push('index');
+
 module.exports = ret;
